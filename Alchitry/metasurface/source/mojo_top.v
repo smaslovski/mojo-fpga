@@ -8,7 +8,7 @@ module mojo_top(
     // Outputs to the 8 onboard LEDs
     output [7:0] led,
     // PWM outputs
-    output reg [9:0] pwm,
+    output reg [10:0] pwm,
     // AVR SPI connections
     output spi_miso,
     input spi_ss,
@@ -80,7 +80,7 @@ module mojo_top(
     
   // reading of configuration data
   
-  reg [7:0] mem[0:9]; // small memory to store the pulse durations for 10 channels
+  reg [7:0] mem[0:10]; // small memory to store the pulse durations for 10 channels
   reg [3:0] addr;     // address (0-9)
 
   // for debugging
@@ -93,7 +93,7 @@ module mojo_top(
   always @(posedge clk_int)
     if (rst_int)
       begin
-        for (n = 0; n < 10; n = n + 1)
+        for (n = 0; n < 11; n = n + 1)
           mem[n] <= 8'b0;
         addr <= 4'b0;
         old_new_rx_data <= 1'b0;
@@ -103,7 +103,7 @@ module mojo_top(
         if (new_rx_data & ~old_new_rx_data)
           begin
             mem[addr] <= rx_data;
-            addr <= addr < 9 ? addr + 1 : 0;
+            addr <= addr < 10 ? addr + 1 : 0;
           end
         old_new_rx_data <= new_rx_data;
       end
@@ -116,11 +116,11 @@ module mojo_top(
     if (rst_int)
       begin
         cnt <= 8'b0;
-        pwm <= 10'b0;
+        pwm <= 11'b0;
       end
     else
       begin
-        for (n = 0; n < 10; n = n + 1)
+        for (n = 0; n < 11; n = n + 1)
           if (mem[n] <= cnt)
             pwm[n] <= 1'b0;
           else
