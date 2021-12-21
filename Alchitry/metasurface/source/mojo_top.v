@@ -80,7 +80,7 @@ module mojo_top(
     
   // reading of configuration data
   
-  reg [7:0] mem[0:10]; // small memory to store the pulse durations for 10 channels
+  reg [7:0] mem[0:10]; // small memory to store the pulse durations for 11 channels
   reg [3:0] addr;     // address (0-9)
 
   // for debugging
